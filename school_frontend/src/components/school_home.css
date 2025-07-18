@@ -1,0 +1,148 @@
+ .video img {
+            width: 100%;
+            height: 500px;
+            display: block; 
+        }
+        .video{
+            margin-bottom: 0%;
+        }
+        
+        @keyframes blink {
+            0% { opacity: 1; } /* Fully visible */
+            50% { opacity: 0; } /* Hidden */
+            100% { opacity: 1; } /* Fully visible again */
+        }
+        .video .News {
+            position: absolute; /* Position text relative to the container */
+            top: 45%; /* Position in the middle vertically */
+            left: 10%; /* Position in the middle horizontally */
+            transform: translate(-50%, -50%); /* Center the text */
+            color: white; /* Text color */
+            padding: 10px 20px; /* Add padding for better readability */
+            font-size: 20px; /* Adjust font size */
+            text-align: top; /* Center-align the text */
+        }
+        
+        .News{
+            background-color: #000000;
+            opacity: 0.8;
+            height:200px;
+            width: 200px;
+            align-items: center;
+            padding-left: 150px;
+        
+        }
+        .news h4{
+            color: rgb(255, 255, 255);
+            animation: blink 1s infinite;
+            margin-top: 0%;
+            margin-left: 60px;
+           
+        }
+        .news p{
+            animation: blink 1s infinite;
+           
+        }
+        @media (max-width: 480px) { 
+            .news {
+            position: absolute; /* Position text relative to the container */
+            top: 45%; /* Position in the middle vertically */
+            margin-left: 50px;
+            transform: translate(-50%, -50%); /* Center the text */
+            color: white; /* Text color */
+            padding: 10px 20px; /* Add padding for better readability */
+            font-size: 20px; /* Adjust font size */
+            text-align: top; /* Center-align the text */
+            }
+         }
+        .marian-life{
+           margin-left: 150px;
+            max-width: 1200px;
+          
+        }
+        .marian-life h1{
+            margin-left: 30px;
+            margin-top: 10px;
+        }
+        
+        .grids {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 60px;
+    padding: 20px;
+    margin: 0 auto; /* Center grid */
+    max-width: 1200px; /* Limit maximum width */
+}
+        .grids > div {
+        border: 1px solid #ffffff; /* Adds a small red border around each grid item */
+        padding: 20px; /* Adds spacing inside each grid item */
+        background-color: #f7f4f4; /* Light background for better readability */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+        }
+    .grids > div img {
+        margin-bottom: 15px; /* Adds spacing below the image */
+        border-radius: 5px; /* Matches the rounded corners */
+    }
+    .grids > div h4 {
+        margin-bottom: 10px; /* Adds spacing below the heading */
+        color: #333; /* A darker shade for better contrast */
+    }
+    .grids > div p {
+        line-height: 1.6; /* Improves readability */
+        color: #555; /* Softer text color */
+    }
+    .grids div:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+    @media (max-width: 992px) { /* Tablets */
+    .grids {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+        padding: 15px;
+    }
+}
+
+@media (max-width: 768px) { /* Mobile Devices */
+    .grids {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding: 10px;
+    }
+
+    .marian-life {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .grids > div {
+        margin: 0 10px; /* Add side margins */
+    }
+}
+
+/* Make images responsive */
+.grids img {
+    width: 100%;
+    height: auto; /* Maintain aspect ratio */
+    max-width: 300px; /* Prevent over-stretching */
+    display: block;
+    margin: 0 auto 15px; /* Center images */
+}
+
+/* Text adjustments for mobile */
+@media (max-width: 480px) {
+    .grids h4 {
+        font-size: 18px;
+    }
+    
+    .grids p {
+        font-size: 14px;
+    }
+    
+    .marian-life h1 {
+        font-size: 24px;
+        text-align: center;
+        margin-left: 0;
+    }
+}
+    
