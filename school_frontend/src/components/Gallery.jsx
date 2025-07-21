@@ -1,59 +1,78 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios'; // Import axios for API calls
 import "./school.css";
 
 const Gallery = () => {
   const [activeFilter, setActiveFilter] = useState("school");
+  const [galleryImages, setGalleryImages] = useState([]); // State to hold images from backend
+  const [loading, setLoading] = useState(true); // State to handle loading
+  const [error, setError] = useState(''); // State to handle errors
 
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-        const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-       // Handle window resize
-        useEffect(() => {
-          const handleResize = () => {
-            setWindowWidth(window.innerWidth);
-            // Close menu when resizing to larger screens
-            if (window.innerWidth > 768) {
-              setIsMenuOpen(false);
-            }
-          };
-      
-          window.addEventListener('resize', handleResize);
-          return () => window.removeEventListener('resize', handleResize);
-        }, []);
-      
-        // Close menu when clicking outside or on a link
-        useEffect(() => {
-          const handleClickOutside = (event) => {
-            const nav = document.querySelector('.nav2 nav');
-            const hamburger = document.querySelector('.hamburger');
-            
-            if (
-              nav && 
-              hamburger &&
-              !nav.contains(event.target) && 
-              !hamburger.contains(event.target) &&
-              isMenuOpen
-            ) {
-              setIsMenuOpen(false);
-            }
-          };
-      
-          if (isMenuOpen) {
-            document.addEventListener('click', handleClickOutside);
-          }
-      
-          return () => {
-            document.removeEventListener('click', handleClickOutside);
-          };
-        }, [isMenuOpen]);
-      
-        const toggleMenu = () => {
-          setIsMenuOpen(!isMenuOpen);
-        };
-      
-        const closeMenu = () => {
-          setIsMenuOpen(false);
-        };
-  
+  // --- Fetch Gallery Images from Backend ---
+  useEffect(() => {
+    const fetchGallery = async () => {
+      try {
+        // Use the VITE_API_URL from your .env file
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/gallery/all`);
+        if (response.data.success) {
+          setGalleryImages(response.data.gallery);
+        } else {
+          
+          setError("Could not fetch gallery images.");
+        }
+      } catch (err) {
+        console.error("Error fetching gallery:", err);
+        setError("An error occurred while fetching the gallery.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGallery();
+  }, []); 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+      if (window.innerWidth > 768) {
+        setIsMenuOpen(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const nav = document.querySelector('.nav2 nav');
+      const hamburger = document.querySelector('.hamburger');
+      if (
+        nav &&
+        hamburger &&
+        !nav.contains(event.target) &&
+        !hamburger.contains(event.target) &&
+        isMenuOpen
+      ) {
+        setIsMenuOpen(false);
+      }
+    };
+    if (isMenuOpen) {
+      document.addEventListener('click', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [isMenuOpen]);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
 
   const handleFilterClick = (filterName) => {
     setActiveFilter(filterName);
@@ -179,18 +198,17 @@ const Gallery = () => {
 
       <header>
         <div className="head">
-          
           <div className="college-name">
             <h2>ST.JOSEPH'S L.P. SCHOOL,</h2>
             <h2 id="h">KUTTIKANAM</h2>
           </div>
         </div>
         <button className="hamburger" onClick={toggleMenu} aria-label="Menu">
-        <i className={`fas ${isMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
-      </button>
+          <i className={`fas ${isMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
+        </button>
 
-      {isMenuOpen && <div className="menu-overlay" onClick={closeMenu}></div>}
-       <div className={`nav2 ${isMenuOpen ? 'active' : ''}`}>
+        {isMenuOpen && <div className="menu-overlay" onClick={closeMenu}></div>}
+        <div className={`nav2 ${isMenuOpen ? 'active' : ''}`}>
           <nav>
             <ul>
               <li><a href="/" target="_self">HOME</a></li>
@@ -214,22 +232,22 @@ const Gallery = () => {
 
       <div className="container">
         <div className="item-links">
-          <span 
-            className={`item-link ${activeFilter === 'school' ? 'menu-active' : ''}`} 
+          <span
+            className={`item-link ${activeFilter === 'school' ? 'menu-active' : ''}`}
             data-name="school"
             onClick={() => handleFilterClick('school')}
           >
             School
           </span>
-          <span 
-            className={`item-link ${activeFilter === 'events' ? 'menu-active' : ''}`} 
+          <span
+            className={`item-link ${activeFilter === 'events' ? 'menu-active' : ''}`}
             data-name="events"
             onClick={() => handleFilterClick('events')}
           >
             Events
           </span>
-          <span 
-            className={`item-link ${activeFilter === 'facilities' ? 'menu-active' : ''}`} 
+          <span
+            className={`item-link ${activeFilter === 'facilities' ? 'menu-active' : ''}`}
             data-name="facilities"
             onClick={() => handleFilterClick('facilities')}
           >
@@ -237,19 +255,15 @@ const Gallery = () => {
           </span>
         </div>
 
+        {/* --- DYNAMICALLY RENDERED IMAGES --- */}
         <div className="photos-group">
-          <div className="photo" data-name="school">
-            <img src="src/assets/gallery/2022-01-04.jpg" alt="" />
-          </div>
-          <div className="photo" data-name="school">
-            <img src="src/assets/gallery/event_1.jpg" alt="" />
-          </div>
-          <div className="photo" data-name="events">
-            <img src="src/assets/gallery/playground.jpeg" alt="" />
-          </div>
-          <div className="photo" data-name="facilities">
-            <img src="src/assets/gallery/Screenshot 2025-01-11 134010.png" alt="" />
-          </div>
+          {loading && <p>Loading gallery...</p>}
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+          {!loading && !error && galleryImages.map((image) => (
+            <div className="photo" data-name={image.tag} key={image._id}>
+              <img src={image.imageUrl} alt={image.tag} />
+            </div>
+          ))}
         </div>
       </div>
 

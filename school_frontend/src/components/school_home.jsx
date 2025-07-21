@@ -1,19 +1,69 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import axios from 'axios'; // Import axios
 import "./school_home.css";
 import "./school.css";
 import { motion, useAnimation, useInView } from "framer-motion";
 import { ParallaxProvider, Parallax } from "react-scroll-parallax";
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+// The font-awesome link should be in your main index.html file's <head> section
+// <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
 function SchoolHome() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [newsItems, setNewsItems] = useState([]); // State for all valid news items
+  const [displayNews, setDisplayNews] = useState([]); // State for news to be displayed
+
   const controls = useAnimation();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
 
+  // --- FETCH LATEST NEWS ---
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/news/all`);
+        if (response.data.success && response.data.news.length > 0) {
+          const today = new Date();
+          
+          // Filter out expired news and sort to find the most recent
+          const validNews = response.data.news
+            .filter(item => new Date(item.expiryDate) >= today)
+            .sort((a, b) => new Date(b.createdAt || b._id) - new Date(a.createdAt || a._id));
+
+          if (validNews.length > 0) {
+            setNewsItems(validNews);
+          } else {
+            setNewsItems([{ title: "No recent announcements." }]);
+          }
+        } else {
+          setNewsItems([{ title: "Admissions open from June 1st!" }]); // Default message
+        }
+      } catch (error) {
+        console.error("Failed to fetch news:", error);
+        setNewsItems([{ title: "Admissions open from June 1st!" }]); // Default message on error
+      }
+    };
+
+    fetchNews();
+  }, []);
+
+  // --- LOGIC FOR SCROLLING NEWS ---
+  useEffect(() => {
+    // Display up to 3 news items. If more, create a looping list for scrolling animation.
+    if (newsItems.length > 0) {
+        if (newsItems.length <= 3) {
+            setDisplayNews(newsItems);
+        } else {
+            // Duplicate the list to create a seamless loop for the CSS animation
+            setDisplayNews([...newsItems, ...newsItems]);
+        }
+    }
+  }, [newsItems]);
+
+
+  // --- EXISTING LOGIC ---
   // Handle window resize
   useEffect(() => {
     const handleResize = () => {
@@ -92,143 +142,158 @@ function SchoolHome() {
     }
   };
 
-  const fadeIn = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { duration: 0.8 }
-    }
-  };
-
-  const slideInFromLeft = {
-    hidden: { x: -100, opacity: 0 },
-    visible: {
-      x: 0,
-      opacity: 1,
-      transition: { duration: 0.6 }
-    }
-  };
-
   return (
     <>
       <style>{`
-  .news-container {
-  position: absolute;
-  top: 40%;
-  left: 3%;
-  transform: translateY(-50%);
-  z-index: 10;
-  width: 85%;
-  max-width: 300px;
-  background-color: rgba(41, 41, 41, 0.95);
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  border-left: 4px solid #d01b1b;
-  backdrop-filter: blur(10px);
-  box-sizing: border-box;
-}
+        .news-container {
+          position: absolute;
+          top: 40%;
+          left: 3%;
+          transform: translateY(-50%);
+          z-index: 10;
+          width: 85%;
+          max-width: 350px;
+          background-color: rgba(41, 41, 41, 0.95);
+          padding: 20px;
+          border-radius: 10px;
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+          border-left: 4px solid #d01b1b;
+          backdrop-filter: blur(10px);
+          box-sizing: border-box;
+        }
 
-.news-title {
-  color: white;
-  font-size: clamp(1.1rem, 1.5vw + 0.8rem, 1.4rem);
-  margin-bottom: 12px;
-  font-weight: 600;
-  line-height: 1.4;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
+        .news-title {
+          color: white;
+          font-size: clamp(1.1rem, 1.5vw + 0.8rem, 1.4rem);
+          margin-bottom: 12px;
+          font-weight: 600;
+          line-height: 1.4;
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* --- STYLES FOR SCROLLING NEWS --- */
+        .news-content {
+            height: 110px; /* Set a fixed height for the scroll area */
+            overflow: hidden;
+            position: relative;
+        }
 
-.news-highlight {
-  color: #f5f5f5;
-  font-weight: 500;
-  font-size: clamp(0.95rem, 1.2vw + 0.8rem, 1.2rem);
-  margin-bottom: 0;
-  line-height: 1.5;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
+        .news-list {
+            position: absolute;
+            width: 100%;
+        }
 
-.news-divider {
-  height: 2px;
-  background-color: #d01b1b;
-  margin: 12px 0;
-  opacity: 0.8;
-  border-radius: 1px;
-}
+        .news-list.scrolling {
+            
+            animation: scroll-up ${newsItems.length * 6}s linear infinite;
+        }
 
-/* Responsive adjustments */
-@media (max-width: 1024px) {
-  .news-container {
-    top: 35%;
-    left: 3%;
-    width: 75%;
-    max-width: 280px;
-    padding: 18px;
-  }
-}
+        .news-list:hover {
+            animation-play-state: paused;
+        }
 
-@media (max-width: 768px) {
-  .news-container {
-    top: 45%;
-    left: 4%;
-    width: 70%;
-    max-width: 260px;
-    padding: 16px;
-  }
-  
-  .news-title {
-    line-height: 1.3;
-  }
-  
-  .news-highlight {
-    line-height: 1.4;
-  }
-}
+        @keyframes scroll-up {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-50%); /* Scrolls exactly one half of the duplicated list */
+            }
+        }
+        /* --- END OF SCROLLING NEWS STYLES --- */
 
-@media (max-width: 480px) {
-  .news-container {
-    top: 50%;
-    left: 5%;
-    width: 75%;
-    max-width: 240px;
-    padding: 14px;
-  }
-  
-  .news-title {
-    margin-bottom: 10px;
-  }
-  
-  .news-divider {
-    margin: 10px 0;
-  }
-}
+        .news-highlight {
+          color: #f5f5f5;
+          font-weight: 500;
+          font-size: clamp(0.95rem, 1.2vw + 0.8rem, 1.2rem);
+          margin-bottom: 1rem; /* Space between news items */
+          line-height: 1.5;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+          display: block; /* Ensure each news item is on its own line */
+        }
 
-@media (max-width: 375px) {
-  .news-container {
-    top: 60%;
-    left: 5%;
-    width: 80%;
-    max-width: 220px;
-    padding: 12px;
-  }
-  
-  .news-highlight {
-    line-height: 1.35;
-  }
-}
+        .news-divider {
+          height: 2px;
+          background-color: #d01b1b;
+          margin: 12px 0;
+          opacity: 0.8;
+          border-radius: 1px;
+        }
 
-@media (max-width: 320px) {
-  .news-container {
-    top: 50%;
-    left: 5%;
-    width: 85%;
-    max-width: 200px;
-    padding: 10px 12px;
-  }
-  
-  .news-title {
-    margin-bottom: 8px;
-  }
-}
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+          .news-container {
+            top: 35%;
+            left: 3%;
+            width: 75%;
+            max-width: 280px;
+            padding: 18px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .news-container {
+            top: 45%;
+            left: 4%;
+            width: 70%;
+            max-width: 260px;
+            padding: 16px;
+          }
+          
+          .news-title {
+            line-height: 1.3;
+          }
+          
+          .news-highlight {
+            line-height: 1.4;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .news-container {
+            top: 50%;
+            left: 5%;
+            width: 75%;
+            max-width: 240px;
+            padding: 14px;
+          }
+          
+          .news-title {
+            margin-bottom: 10px;
+          }
+          
+          .news-divider {
+            margin: 10px 0;
+          }
+        }
+
+        @media (max-width: 375px) {
+          .news-container {
+            top: 60%;
+            left: 5%;
+            width: 80%;
+            max-width: 220px;
+            padding: 12px;
+          }
+          
+          .news-highlight {
+            line-height: 1.35;
+          }
+        }
+
+        @media (max-width: 320px) {
+          .news-container {
+            top: 50%;
+            left: 5%;
+            width: 85%;
+            max-width: 200px;
+            padding: 10px 12px;
+          }
+          
+          .news-title {
+            margin-bottom: 8px;
+          }
+        }
         /* Keyframes */
         @keyframes slideUpFadeIn {
           0% {
@@ -357,10 +422,11 @@ function SchoolHome() {
 
       {/* Hero Section with Parallax Effect */}
       <div className="video">
-        <Parallax speed={-10}>
-          <img src="schoolimage.jpg" alt="school-img" />
-         
-        </Parallax>
+        <ParallaxProvider>
+            <Parallax speed={-10}>
+                <img src="schoolimage.jpg" alt="school-img" />
+            </Parallax>
+        </ParallaxProvider>
         <motion.div 
           className="news-container"
           initial={{ opacity: 0 }}
@@ -371,14 +437,13 @@ function SchoolHome() {
             <h4 className="news-title">News & Announcements</h4>
             <div className="news-divider"></div>
             <div className="news-content">
-              <motion.p 
-                className="news-highlight"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.6 }}
-              >
-                Admissions open from June 1st!
-              </motion.p>
+                <div className={`news-list ${newsItems.length > 3 ? 'scrolling' : ''}`}>
+                    {displayNews.map((news, index) => (
+                        <p className="news-highlight" key={index}>
+                            {news.title}
+                        </p>
+                    ))}
+                </div>
             </div>
           </div>
         </motion.div>
@@ -388,7 +453,7 @@ function SchoolHome() {
       <motion.div 
         className="marian-life"
         initial="hidden"
-        animate="visible"
+        animate={controls}
         variants={containerVariants}
         ref={ref}
       >
