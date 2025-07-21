@@ -2,7 +2,7 @@ import express from 'express'
 import { adminLogin} from '../controllers/adminController.js'
 import {addStaff,editStaff, deleteStaff,getAllStaff} from '../controllers/staffController.js'
 import upload from "../middleware/multer.js";
-import adminAuth from '../middleware/adminauth.js';
+import adminAuth from '../middleware/adminAuth.js';
 import { addNews,editNews,deleteNews,getAllNews } from '../controllers/newsController.js';
 import { addGallery, deleteGallery, editGallery,getAllGallery } from '../controllers/galleryController.js';
 
