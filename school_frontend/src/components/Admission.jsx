@@ -55,25 +55,76 @@ const Admission = () => {
     <div>
       <style>
         {`
-          .image-container img {
-            width: 100%;
-            height: 190px;
-            display: block;
-          }
+          .fixed-header {
+          position: fixed;
+          top: 0;
+          width: 100%;
+          background-color: white;
+          z-index: 1000;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px 20px;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+          height: 80px;
+        }
+            .header-content {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+        }
+          /* Desktop Navigation */
+        .desktop-nav {
+          display: flex;
+          align-items: center;
+        }
+
+        .desktop-nav ul {
+          display: flex;
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+
+        .desktop-nav ul li {
+          margin: 0 15px;
+        }
+
+        .desktop-nav ul li a {
+          text-decoration: none;
+          color: black;
+          font-size: 16px;
+          transition: color 0.3s;
+        }
+
+        .desktop-nav ul li a:hover {
+          color: #d01b1b;
+        }
           .image-container {
-            position: relative;
-            width: 100%;
-          }
-          .image-container .text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: black;
-            padding: 10px 20px;
-            font-size: 20px;
-            text-align: center;
-          }
+          margin-top: 80px;
+        }
+
+        .image-container img {
+          width: 100%;
+          height: 190px;
+          display: block;
+        }
+        .image-container {
+          position: relative;
+          width: 100%;
+        }
+        .image-container .text {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          color: black;
+          padding: 10px 20px;
+          font-size: 20px;
+          text-align: center;
+        }
+
   
           .admission-notification {
             margin: auto;
@@ -109,6 +160,7 @@ const Admission = () => {
           .class_details {
             max-width: 1000px;
             margin: auto;
+            overflow-x: auto;
           }
           
           table {
@@ -116,6 +168,7 @@ const Admission = () => {
             border-collapse: collapse;
             margin-top: 60px;
             font-size: 17px;
+            min-width: 600px;
           }
 
           table th, table td {
@@ -156,34 +209,113 @@ const Admission = () => {
             background: linear-gradient(135deg, #ff7e5f, #feb47b); 
             color: white;
           }
+
+          /* Responsive styles */
+          @media (max-width: 768px) {
+            .admission-notification {
+              margin: 20px;
+              padding: 15px;
+              margin-top: 30px;
+              margin-bottom: 30px;
+            }
+
+            .admission-notification p {
+              font-size: 15px;
+              line-height: 1.6;
+            }
+
+            .class_details {
+              margin: 20px;
+            }
+
+            table {
+              margin-top: 30px;
+              font-size: 15px;
+            }
+
+            table th, table td {
+              padding: 8px 10px;
+            }
+
+            table caption {
+              font-size: 24px;
+            }
+          }
+
+          @media (max-width: 480px) {
+            .admission-notification {
+              margin: 15px;
+              padding: 12px;
+            }
+
+            .admission-notification p {
+              font-size: 14px;
+            }
+
+            table {
+              font-size: 14px;
+            }
+
+            table caption {
+              font-size: 20px;
+            }
+          }
         `}
       </style>
 
-      <header>
-        <div className="head">
-          
-          <div className="college-name">   
-            <h2>ST.JOSEPH'S L.P. SCHOOL,</h2><h2 id="h">KUTTIKANAM</h2>
+    <header className="fixed-header">
+        <div className="header-content">
+          <div className="head">
+            <div className="college-name">   
+              <h2>ST.JOSEPH'S L.P. SCHOOL,</h2><h2 id="h">KUTTIKANAM</h2>
+            </div>
           </div>
-        </div>
-        <button className="hamburger" onClick={toggleMenu} aria-label="Menu">
-        <i className={`fas ${isMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
-      </button>
 
-      {isMenuOpen && <div className="menu-overlay" onClick={closeMenu}></div>}
-       <div className={`nav2 ${isMenuOpen ? 'active' : ''}`}>
-          <nav>
-             <ul>
-              <li><a href="/" target="_self">HOME</a></li>
-              <li><a href="/about" target="_self">ABOUT US</a></li>
-              <li><a href="/gallery" target="_blank">GALLERY</a></li>
-              <li><a href="/academics" target="_self">ACADEMICS</a></li>
-              <li><a href="/admission" target="_self">ADMISSION</a></li>
-              <li><a href="/staffs" target="_self">STAFFS</a></li>
-              <li><a href="/contact" target="_blank">CONTACT US</a></li>
-            </ul>
-          </nav>
+          {/* Desktop Navigation */}
+          {windowWidth > 1300 && (
+            <div className="desktop-nav">
+              <nav>
+                <ul>
+                  <li><a href="/" target="_self">HOME</a></li>
+                  <li><a href="/about" target="_self">ABOUT US</a></li>
+                  <li><a href="/gallery" target="_blank">GALLERY</a></li>
+                  <li><a href="/academics" target="_self">ACADEMICS</a></li>
+                  <li><a href="/admission" target="_self">ADMISSION</a></li>
+                  <li><a href="/staffs" target="_self">STAFFS</a></li>
+                  <li><a href="/contact" target="_blank">CONTACT US</a></li>
+                </ul>
+              </nav>
+            </div>
+          )}
+
+          {/* Mobile Hamburger Button */}
+          {windowWidth <= 1300 && (
+            <button className="hamburger" onClick={toggleMenu} aria-label="Menu">
+              <i className={`fas ${isMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
+            </button>
+          )}
         </div>
+
+        {/* Mobile Navigation Menu */}
+        {windowWidth <= 1300 && isMenuOpen && (
+          <div className="menu-overlay" onClick={closeMenu}></div>
+        )}
+
+        {windowWidth <= 1300 && (
+          <div className={`nav2 ${isMenuOpen ? 'active' : ''}`}>
+            <nav>
+              <ul>
+                <li><a href="/" target="_self" onClick={closeMenu}>HOME</a></li>
+                <li><a href="/about" target="_self" onClick={closeMenu}>ABOUT US</a></li>
+                <li><a href="/gallery" target="_blank" onClick={closeMenu}>GALLERY</a></li>
+                <li><a href="/academics" target="_self" onClick={closeMenu}>ACADEMICS</a></li>
+                <li><a href="/admission" target="_self" onClick={closeMenu}>ADMISSION</a></li>
+                <li><a href="/staffs" target="_self" onClick={closeMenu}>STAFFS</a></li>
+                <li><a href="/contact" target="_blank" onClick={closeMenu}>CONTACT US</a></li>
+              </ul>
+            </nav>
+          </div>
+        )}
       </header>
 
       <div className="image-container">
@@ -282,7 +414,7 @@ const Admission = () => {
       </footer>
       
       <div className="copyright">
-        <p>Copyright &copy; 2024 All Rights Reserved | ST.Joseph's L.P. School Kuttikanam | Privacy Policy | Terms & Conditions</p>
+        <p>Copyright &copy; 2024 All Rights Reserved </p>
       </div>
     </div>
   );

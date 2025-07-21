@@ -173,7 +173,7 @@ footer {
 }
 
 /* Mobile Navigation */
-@media (max-width: 1390px) {
+@media (max-width: 1300px) {
   .hamburger {
     display: block;
   }

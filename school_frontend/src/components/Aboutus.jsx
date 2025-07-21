@@ -5,12 +5,12 @@ import "./school.css";
 const Aboutus = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
- // Handle window resize
+  
+  // Handle window resize
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
-      // Close menu when resizing to larger screens
-      if (window.innerWidth > 768) {
+      if (window.innerWidth > 1300) {
         setIsMenuOpen(false);
       }
     };
@@ -56,6 +56,31 @@ const Aboutus = () => {
   return (
     <div>
       <style jsx>{`
+        .fixed-header {
+          position: fixed;
+          top: 0;
+          width: 100%;
+          background-color: white;
+          z-index: 1000;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px 20px;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+          height: 80px;
+        }
+
+        .header-content {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+        }
+
+        .image-container {
+          margin-top: 80px;
+        }
+
         .image-container img {
           width: 100%;
           height: 190px;
@@ -75,15 +100,16 @@ const Aboutus = () => {
           font-size: 20px;
           text-align: center;
         }
+
+        /* --------------  RESPONSIVE about & overview  -------------- */
         .about {
-          margin: auto;
-          border: 1px solid #f20404;    
+          margin: 50px auto;
+          border: 1px solid #f20404;
           max-width: 1000px;
+          width: calc(100% - 40px);
           border-radius: 8px;
-          padding: 20px; 
-          box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-          margin-top: 30px;
-          margin-bottom: 50px;
+          padding: 20px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
           background-color: #f9f9f9;
         }
         .about p {
@@ -93,10 +119,42 @@ const Aboutus = () => {
           text-align: justify;
           margin-bottom: 20px;
         }
+        @media (max-width: 1024px) {
+          .about {
+            width: calc(100% - 80px);
+            margin-left: 40px;
+            margin-right: 40px;
+          }
+        }
+        @media (max-width: 768px) {
+          .about {
+            width: calc(100% - 60px);
+            margin-left: 30px;
+            margin-right: 30px;
+          }
+        }
+        @media (max-width: 480px) {
+          .about {
+            width: calc(100% - 32px);
+            margin: 20px 16px 40px;
+            padding: 16px;
+          }
+        }
+
         .overview {
+          width: 100%;
           max-width: 1000px;
           margin: auto;
+          padding: 0 16px;
+          box-sizing: border-box;
         }
+        @media (max-width: 480px) {
+          .overview {
+            padding: 8px 8px;
+          }
+        }
+        /* ----------------------------------------------------------- */
+
         table {
           width: 100%;
           border-collapse: collapse;
@@ -126,34 +184,89 @@ const Aboutus = () => {
           margin-bottom: 10px;
           text-align: left;
         }
+
+        /* Desktop Navigation */
+        .desktop-nav {
+          display: flex;
+          align-items: center;
+        }
+
+        .desktop-nav ul {
+          display: flex;
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+
+        .desktop-nav ul li {
+          margin: 0 15px;
+        }
+
+        .desktop-nav ul li a {
+          text-decoration: none;
+          color: black;
+          font-size: 16px;
+          transition: color 0.3s;
+        }
+
+        .desktop-nav ul li a:hover {
+          color: #d01b1b;
+        }
       `}</style>
 
-      <header>
-        <div className="head">
-          
-          <div className="college-name">   
-            <h2>ST.JOSEPH'S L.P. SCHOOL,</h2><h2 id="h">KUTTIKANAM</h2>
+      <header className="fixed-header">
+        <div className="header-content">
+          <div className="head">
+            <div className="college-name">   
+              <h2>ST.JOSEPH'S L.P. SCHOOL,</h2><h2 id="h">KUTTIKANAM</h2>
+            </div>
           </div>
-        </div>
-        <button className="hamburger" onClick={toggleMenu} aria-label="Menu">
-        <i className={`fas ${isMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
-      </button>
 
-      {isMenuOpen && <div className="menu-overlay" onClick={closeMenu}></div>}
+          {/* Desktop Navigation */}
+          {windowWidth > 1300 && (
+            <div className="desktop-nav">
+              <nav>
+                <ul>
+                  <li><a href="/" target="_self">HOME</a></li>
+                  <li><a href="/about" target="_self">ABOUT US</a></li>
+                  <li><a href="/gallery" target="_blank">GALLERY</a></li>
+                  <li><a href="/academics" target="_self">ACADEMICS</a></li>
+                  <li><a href="/admission" target="_self">ADMISSION</a></li>
+                  <li><a href="/staffs" target="_self">STAFFS</a></li>
+                  <li><a href="/contact" target="_blank">CONTACT US</a></li>
+                </ul>
+              </nav>
+            </div>
+          )}
 
-        <div className={`nav2 ${isMenuOpen ? 'active' : ''}`}>
-          <nav>
-            <ul>
-              <li><a href="/" target="_self">HOME</a></li>
-              <li><a href="/about" target="_self">ABOUT US</a></li>
-              <li><a href="/gallery" target="_blank">GALLERY</a></li>
-              <li><a href="/academics" target="_self">ACADEMICS</a></li>
-              <li><a href="/admission" target="_self">ADMISSION</a></li>
-              <li><a href="/staffs" target="_self">STAFFS</a></li>
-              <li><a href="/contact" target="_blank">CONTACT US</a></li>
-            </ul>
-          </nav>
+          {/* Mobile Hamburger Button */}
+          {windowWidth <= 1300 && (
+            <button className="hamburger" onClick={toggleMenu} aria-label="Menu">
+              <i className={`fas ${isMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
+            </button>
+          )}
         </div>
+
+        {/* Mobile Navigation Menu */}
+        {windowWidth <= 1300 && isMenuOpen && (
+          <div className="menu-overlay" onClick={closeMenu}></div>
+        )}
+
+        {windowWidth <= 1300 && (
+          <div className={`nav2 ${isMenuOpen ? 'active' : ''}`}>
+            <nav>
+              <ul>
+                <li><a href="/" target="_self" onClick={closeMenu}>HOME</a></li>
+                <li><a href="/about" target="_self" onClick={closeMenu}>ABOUT US</a></li>
+                <li><a href="/gallery" target="_blank" onClick={closeMenu}>GALLERY</a></li>
+                <li><a href="/academics" target="_self" onClick={closeMenu}>ACADEMICS</a></li>
+                <li><a href="/admission" target="_self" onClick={closeMenu}>ADMISSION</a></li>
+                <li><a href="/staffs" target="_self" onClick={closeMenu}>STAFFS</a></li>
+                <li><a href="/contact" target="_blank" onClick={closeMenu}>CONTACT US</a></li>
+              </ul>
+            </nav>
+          </div>
+        )}
       </header>
       
       <div className="image-container">
@@ -188,10 +301,10 @@ const Aboutus = () => {
               <td>State</td><td>Kerala</td>
             </tr>
             <tr>
-              <td>Principal</td><td>nill</td>
+              <td>Principal</td><td>Ms.Keerthana</td>
             </tr>
             <tr>
-              <td>Year of establishment</td><td>1212</td>
+              <td>Year of establishment</td><td>1964</td>
             </tr>
             <tr>
               <td>Financial category</td><td>Government</td>
@@ -204,9 +317,6 @@ const Aboutus = () => {
             </tr>
             <tr>
               <td>Location</td><td>Rural</td>
-            </tr>
-            <tr>
-              <td>Area of school</td><td>000</td>
             </tr>
           </tbody>
         </table>
@@ -255,7 +365,7 @@ const Aboutus = () => {
       </footer>
       
       <div className="copyright">
-        <p>Copyright &copy; 2024 All Rights Reserved | ST.Joseph's L.P. School Kuttikanam | Privacy Policy | Terms & Conditions</p>
+        <p>Copyright &copy; 2024 All Rights Reserved </p>
       </div>
     </div>
   );

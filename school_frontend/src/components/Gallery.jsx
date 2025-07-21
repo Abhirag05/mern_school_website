@@ -81,6 +81,56 @@ const Gallery = () => {
   return (
     <div>
       <style jsx>{`
+       .fixed-header {
+          position: fixed;
+          top: 0;
+          width: 100%;
+          background-color: white;
+          z-index: 1000;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px 20px;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+          height: 80px;
+        }
+            .header-content {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+        }
+          /* Desktop Navigation */
+        .desktop-nav {
+          display: flex;
+          align-items: center;
+        }
+
+        .desktop-nav ul {
+          display: flex;
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+
+        .desktop-nav ul li {
+          margin: 0 15px;
+        }
+
+        .desktop-nav ul li a {
+          text-decoration: none;
+          color: black;
+          font-size: 16px;
+          transition: color 0.3s;
+        }
+
+        .desktop-nav ul li a:hover {
+          color: #d01b1b;
+        }
+          .image-container {
+          margin-top: 80px;
+        }
+
         .image-container img {
           width: 100%;
           height: 190px;
@@ -100,10 +150,13 @@ const Gallery = () => {
           font-size: 20px;
           text-align: center;
         }
+
         .container {
-          width: 80%;
+          width: 90%;
           max-width: 1200px;
           margin: 0 auto;
+          padding: 0 15px;
+          box-sizing: border-box;
         }
         .photos-group img {
           width: 100%;
@@ -113,22 +166,24 @@ const Gallery = () => {
           transition: 0.4s ease;
         }
         .item-links {
-          width: 60%;
+          width: 100%;
           display: flex;
           margin: 40px auto;
           align-items: center;
           justify-content: center;
-          gap: 40px;
+          gap: 15px;
+          flex-wrap: wrap;
         }
         .item-link {
           border: 1px solid #f20404;
-          padding: 10px 30px;
-          font-size: 18px;
+          padding: 8px 15px;
+          font-size: 16px;
           font-weight: 500;
           color: black;
           cursor: pointer;
           border-radius: 30px;
           transition: 0.4s ease;
+          white-space: nowrap;
         }
         .item-link:hover {
           background: linear-gradient(135deg, #ff7e5f, #feb47b);
@@ -171,15 +226,21 @@ const Gallery = () => {
             width: 90%;
           }
           .item-links {
-            width: 90%;
+            gap: 20px;
           }
         }
         @media (max-width: 991px) {
           .photos-group {
             grid-template-columns: 1fr 1fr;
           }
+        }
+        @media (max-width: 768px) {
           .item-links {
-            width: 100%;
+            gap: 10px;
+          }
+          .item-link {
+            padding: 6px 12px;
+            font-size: 14px;
           }
         }
         @media (max-width: 600px) {
@@ -187,40 +248,79 @@ const Gallery = () => {
             grid-template-columns: 1fr;
           }
           .item-links {
-            justify-content: space-between;
-            gap: 0px;
+            justify-content: center;
+            gap: 8px;
           }
           .photo {
             height: max-content;
           }
         }
+        @media (max-width: 480px) {
+          .item-link {
+            padding: 5px 10px;
+            font-size: 13px;
+          }
+        }
+        @media (max-width: 320px) {
+          .item-links {
+            gap: 5px;
+          }
+        }
       `}</style>
 
-      <header>
-        <div className="head">
-          <div className="college-name">
-            <h2>ST.JOSEPH'S L.P. SCHOOL,</h2>
-            <h2 id="h">KUTTIKANAM</h2>
+      <header className="fixed-header">
+        <div className="header-content">
+          <div className="head">
+            <div className="college-name">   
+              <h2>ST.JOSEPH'S L.P. SCHOOL,</h2><h2 id="h">KUTTIKANAM</h2>
+            </div>
           </div>
-        </div>
-        <button className="hamburger" onClick={toggleMenu} aria-label="Menu">
-          <i className={`fas ${isMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
-        </button>
 
-        {isMenuOpen && <div className="menu-overlay" onClick={closeMenu}></div>}
-        <div className={`nav2 ${isMenuOpen ? 'active' : ''}`}>
-          <nav>
-            <ul>
-              <li><a href="/" target="_self">HOME</a></li>
-              <li><a href="/about" target="_self">ABOUT US</a></li>
-              <li><a href="/gallery" target="_blank">GALLERY</a></li>
-              <li><a href="/academics" target="_self">ACADEMICS</a></li>
-              <li><a href="/admission" target="_self">ADMISSION</a></li>
-              <li><a href="/staffs" target="_self">STAFFS</a></li>
-              <li><a href="/contact" target="_blank">CONTACT US</a></li>
-            </ul>
-          </nav>
+          {/* Desktop Navigation */}
+          {windowWidth > 1300 && (
+            <div className="desktop-nav">
+              <nav>
+                <ul>
+                  <li><a href="/" target="_self">HOME</a></li>
+                  <li><a href="/about" target="_self">ABOUT US</a></li>
+                  <li><a href="/gallery" target="_blank">GALLERY</a></li>
+                  <li><a href="/academics" target="_self">ACADEMICS</a></li>
+                  <li><a href="/admission" target="_self">ADMISSION</a></li>
+                  <li><a href="/staffs" target="_self">STAFFS</a></li>
+                  <li><a href="/contact" target="_blank">CONTACT US</a></li>
+                </ul>
+              </nav>
+            </div>
+          )}
+
+          {/* Mobile Hamburger Button */}
+          {windowWidth <= 1300 && (
+            <button className="hamburger" onClick={toggleMenu} aria-label="Menu">
+              <i className={`fas ${isMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
+            </button>
+          )}
         </div>
+
+        {/* Mobile Navigation Menu */}
+        {windowWidth <= 1300 && isMenuOpen && (
+          <div className="menu-overlay" onClick={closeMenu}></div>
+        )}
+
+        {windowWidth <= 1300 && (
+          <div className={`nav2 ${isMenuOpen ? 'active' : ''}`}>
+            <nav>
+              <ul>
+                <li><a href="/" target="_self" onClick={closeMenu}>HOME</a></li>
+                <li><a href="/about" target="_self" onClick={closeMenu}>ABOUT US</a></li>
+                <li><a href="/gallery" target="_blank" onClick={closeMenu}>GALLERY</a></li>
+                <li><a href="/academics" target="_self" onClick={closeMenu}>ACADEMICS</a></li>
+                <li><a href="/admission" target="_self" onClick={closeMenu}>ADMISSION</a></li>
+                <li><a href="/staffs" target="_self" onClick={closeMenu}>STAFFS</a></li>
+                <li><a href="/contact" target="_blank" onClick={closeMenu}>CONTACT US</a></li>
+              </ul>
+            </nav>
+          </div>
+        )}
       </header>
 
       <div className="image-container">
@@ -274,15 +374,15 @@ const Gallery = () => {
           <p>(+91 -7594971004, +91 - 7594971020)</p>
         </div>
         <div className="footer-map">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3934.139342173254!2d76.9707368!3d9.5832552!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b064d5a0b8cf841%3A0x50bc53ffe205e74e!2sSJLPS%20kuttikkanam!5e0!3m2!1sen!2sin!4v1736003669585!5m2!1sen!2sin"
-            width="350"
-            height="200"
-            style={{ border: 0 }}
-            allowFullScreen=""
-            loading="lazy"
+           <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3934.139342173254!2d76.9707368!3d9.5832552!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b064d5a0b8cf841%3A0x50bc53ffe205e74e!2sSJLPS%20kuttikkanam!5e0!3m2!1sen!2sin!4v1736003669585!5m2!1sen!2sin" 
+            width="350" 
+            height="200" 
+            style={{border:0}} 
+            allowFullScreen 
+            loading="lazy" 
             referrerPolicy="no-referrer-when-downgrade"
-            title="School Location Map"
+            title="School Location"
           ></iframe>
         </div>
         <div className="footer-contact">
@@ -310,8 +410,7 @@ const Gallery = () => {
       
       <div className="copyright">
         <p>
-          Copyright &copy; 2024 All Rights Reserved | ST.Joseph's L.P. School
-          Kuttikanam | Privacy Policy | Terms & Conditions
+          Copyright &copy; 2024 All Rights Reserved 
         </p>
       </div>
     </div>

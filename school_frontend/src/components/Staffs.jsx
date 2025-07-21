@@ -8,6 +8,7 @@ const Staffs = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [activeFilter, setActiveFilter] = useState('teaching'); // Default filter
+     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
     // --- State for mobile menu ---
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -75,26 +76,76 @@ const Staffs = () => {
     return (
         <div>
             <style jsx>{`
-                /* Your existing CSS is preserved */
-                .image-container img {
-                  width: 100%;
-                  height: 190px;
-                  display: block;
-                }
-                .image-container {
-                  position: relative;
-                  width: 100%;
-                }
-                .image-container .text {
-                  position: absolute;
-                  top: 50%;
-                  left: 50%;
-                  transform: translate(-50%, -50%);
-                  color: black;
-                  padding: 10px 20px;
-                  font-size: 20px;
-                  text-align: center;
-                }
+                .fixed-header {
+          position: fixed;
+          top: 0;
+          width: 100%;
+          background-color: white;
+          z-index: 1000;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px 20px;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+          height: 80px;
+        }
+            .header-content {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+        }
+          /* Desktop Navigation */
+        .desktop-nav {
+          display: flex;
+          align-items: center;
+        }
+
+        .desktop-nav ul {
+          display: flex;
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+
+        .desktop-nav ul li {
+          margin: 0 15px;
+        }
+
+        .desktop-nav ul li a {
+          text-decoration: none;
+          color: black;
+          font-size: 16px;
+          transition: color 0.3s;
+        }
+
+        .desktop-nav ul li a:hover {
+          color: #d01b1b;
+        }
+          .image-container {
+          margin-top: 80px;
+        }
+
+        .image-container img {
+          width: 100%;
+          height: 190px;
+          display: block;
+        }
+        .image-container {
+          position: relative;
+          width: 100%;
+        }
+        .image-container .text {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          color: black;
+          padding: 10px 20px;
+          font-size: 20px;
+          text-align: center;
+        }
+
                 .staff-details {
                   width: 100%;
                   display: flex;
@@ -110,11 +161,11 @@ const Staffs = () => {
                 /* --- UPDATED STYLES START HERE --- */
                 .staff-photos img {
                   width: 100%;
-                  height: 300px; /* Rectangular aspect ratio */
-                  border-radius: 8px; /* Slightly rounded corners */
+                  height: 300px;
+                  border-radius: 8px;
                   display: block;
                   object-fit: cover;
-                  object-position: top; /* Focus on the top of the image */
+                  object-position: top;
                 }
                 .item-links {
                   width: 60%;
@@ -144,17 +195,16 @@ const Staffs = () => {
                 }
                 .photos-group {
                   display: grid;
-                  grid-template-columns: repeat(4, 1fr); /* Changed to 4 columns to match example */
+                  grid-template-columns: repeat(4, 1fr);
                   gap: 25px;
                 }
                 .photo {
                   height: auto;
                   animation: SclAnimation 0.4s ease;
-                  /* Logic to hide/show based on activeFilter */
                   display: none;
                 }
                 .photo[data-name="${activeFilter}"] {
-                    display: block; /* This CSS rule handles the filtering */
+                    display: block;
                 }
                 .staff-info {
                     margin-top: 1rem;
@@ -169,86 +219,132 @@ const Staffs = () => {
                     font-size: 0.95rem;
                     margin-top: 0.25rem;
                 }
-                /* Styles for the placeholder icon */
                 .placeholder-icon-container {
                   width: 100%;
                   height: 300px;
                   display: flex;
                   align-items: center;
                   justify-content: center;
-                  background-color: #e5e7eb; /* Light gray background */
+                  background-color: #e5e7eb;
                   border-radius: 8px;
                 }
                 .placeholder-icon-container svg {
                   width: 80px;
                   height: 80px;
-                  color: #9ca3af; /* Darker gray for the icon */
+                  color: #9ca3af;
                 }
                 @keyframes SclAnimation {
                     from { opacity: 0; transform: translateY(10px); }
                     to { opacity: 1; transform: translateY(0); }
                 }
-                /* --- UPDATED STYLES END HERE --- */
-                @media (max-width: 1024px) {
-                  .container {
-                    width: 90%;
-                  }
+                /* Responsive styles */
+                @media (max-width: 1200px) {
                   .photos-group {
                     grid-template-columns: repeat(3, 1fr);
                   }
-                  .item-links {
-                    width: 90%;
-                  }
                 }
-                @media (max-width: 991px) {
+                @media (max-width: 992px) {
                   .photos-group {
                     grid-template-columns: repeat(2, 1fr);
                   }
                   .item-links {
-                    width: 100%;
+                    width: 80%;
+                    gap: 20px;
                   }
                 }
-                @media (max-width: 600px) {
+                @media (max-width: 768px) {
+                  .container {
+                    width: 90%;
+                  }
+                  .item-links {
+                    width: 100%;
+                    flex-direction: column;
+                    gap: 15px;
+                  }
+                  .item-link {
+                    width: 80%;
+                    margin: 0 auto;
+                  }
+                  .staff-photos img {
+                    height: 250px;
+                  }
+                  .placeholder-icon-container {
+                    height: 250px;
+                  }
+                }
+                @media (max-width: 576px) {
                   .photos-group {
                     grid-template-columns: 1fr;
                   }
-                  .item-links {
-                    flex-direction: column; /* Stack filters on small screens */
-                    gap: 15px;
+                  .item-link {
+                    width: 100%;
+                    padding: 8px 15px;
+                    font-size: 16px;
                   }
-                  .photo {
-                    height: auto;
+                  .staff-photos img {
+                    height: 200px;
+                  }
+                  .placeholder-icon-container {
+                    height: 200px;
                   }
                 }
+                /* --- UPDATED STYLES END HERE --- */
             `}</style>
 
-            <header>
-                <div className="head">
-                    <div className="college-name">
-                        <h2>ST.JOSEPH'S L.P. SCHOOL,</h2>
-                        <h2 id="h">KUTTIKANAM</h2>
-                    </div>
-                </div>
-                <button className="hamburger" onClick={toggleMenu} aria-label="Menu">
-                    <i className={`fas ${isMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
-                </button>
+            <header className="fixed-header">
+        <div className="header-content">
+          <div className="head">
+            <div className="college-name">   
+              <h2>ST.JOSEPH'S L.P. SCHOOL,</h2><h2 id="h">KUTTIKANAM</h2>
+            </div>
+          </div>
 
-                {isMenuOpen && <div className="menu-overlay" onClick={closeMenu}></div>}
-                <div className={`nav2 ${isMenuOpen ? 'active' : ''}`}>
-                    <nav>
-                        <ul>
-                            <li><a href="/" target="_self">HOME</a></li>
-                            <li><a href="/about" target="_self">ABOUT US</a></li>
-                            <li><a href="/gallery" target="_blank">GALLERY</a></li>
-                            <li><a href="/academics" target="_self">ACADEMICS</a></li>
-                            <li><a href="/admission" target="_self">ADMISSION</a></li>
-                            <li><a href="/staffs" target="_self">STAFFS</a></li>
-                            <li><a href="/contact" target="_blank">CONTACT US</a></li>
-                        </ul>
-                    </nav>
-                </div>
-            </header>
+          {/* Desktop Navigation */}
+          {windowWidth > 1300 && (
+            <div className="desktop-nav">
+              <nav>
+                <ul>
+                  <li><a href="/" target="_self">HOME</a></li>
+                  <li><a href="/about" target="_self">ABOUT US</a></li>
+                  <li><a href="/gallery" target="_blank">GALLERY</a></li>
+                  <li><a href="/academics" target="_self">ACADEMICS</a></li>
+                  <li><a href="/admission" target="_self">ADMISSION</a></li>
+                  <li><a href="/staffs" target="_self">STAFFS</a></li>
+                  <li><a href="/contact" target="_blank">CONTACT US</a></li>
+                </ul>
+              </nav>
+            </div>
+          )}
 
+          {/* Mobile Hamburger Button */}
+          {windowWidth <= 1300 && (
+            <button className="hamburger" onClick={toggleMenu} aria-label="Menu">
+              <i className={`fas ${isMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
+            </button>
+          )}
+        </div>
+
+        {/* Mobile Navigation Menu */}
+        {windowWidth <= 1300 && isMenuOpen && (
+          <div className="menu-overlay" onClick={closeMenu}></div>
+        )}
+
+        {windowWidth <= 1300 && (
+          <div className={`nav2 ${isMenuOpen ? 'active' : ''}`}>
+            <nav>
+              <ul>
+                <li><a href="/" target="_self" onClick={closeMenu}>HOME</a></li>
+                <li><a href="/about" target="_self" onClick={closeMenu}>ABOUT US</a></li>
+                <li><a href="/gallery" target="_blank" onClick={closeMenu}>GALLERY</a></li>
+                <li><a href="/academics" target="_self" onClick={closeMenu}>ACADEMICS</a></li>
+                <li><a href="/admission" target="_self" onClick={closeMenu}>ADMISSION</a></li>
+                <li><a href="/staffs" target="_self" onClick={closeMenu}>STAFFS</a></li>
+                <li><a href="/contact" target="_blank" onClick={closeMenu}>CONTACT US</a></li>
+              </ul>
+            </nav>
+          </div>
+        )}
+      </header>
             <div className="image-container">
                 <img src="schoolbackground3.jpg" alt="school" />
                 <div className="text">
@@ -287,7 +383,7 @@ const Staffs = () => {
                                 )}
                                 <div className="staff-info">
                                     <p className="staff-name">{staff.name}</p>
-                                    
+                                    <p className="staff-designation">{staff.designation}</p>
                                 </div>
                             </div>
                         ))}
@@ -337,7 +433,7 @@ const Staffs = () => {
             </footer>
 
             <div className="copyright">
-                <p>Copyright &copy; 2024 All Rights Reserved | ST.Joseph's L.P. School Kuttikanam | Privacy Policy | Terms & Conditions</p>
+                <p>Copyright &copy; 2024 All Rights Reserved </p>
             </div>
         </div>
     );

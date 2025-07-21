@@ -145,16 +145,63 @@ function SchoolHome() {
   return (
     <>
       <style>{`
+      .fixed-header {
+          position: fixed;
+          top: 0;
+          width: 100%;
+          background-color: white;
+          z-index: 1000;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px 20px;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+          height: 80px;
+        }
+            .header-content {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+        }
+          /* Desktop Navigation */
+        .desktop-nav {
+          display: flex;
+          align-items: center;
+        }
+
+        .desktop-nav ul {
+          display: flex;
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+
+        .desktop-nav ul li {
+          margin: 0 15px;
+        }
+
+        .desktop-nav ul li a {
+          text-decoration: none;
+          color: black;
+          font-size: 16px;
+          transition: color 0.3s;
+        }
+
+        .desktop-nav ul li a:hover {
+          color: #d01b1b;
+        }
+
         .news-container {
           position: absolute;
-          top: 40%;
-          left: 3%;
-          transform: translateY(-50%);
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
           z-index: 10;
-          width: 85%;
-          max-width: 350px;
+          width: 90%;
+          max-width: 400px;
           background-color: rgba(41, 41, 41, 0.95);
-          padding: 20px;
+          padding: 15px;
           border-radius: 10px;
           box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
           border-left: 4px solid #d01b1b;
@@ -164,16 +211,16 @@ function SchoolHome() {
 
         .news-title {
           color: white;
-          font-size: clamp(1.1rem, 1.5vw + 0.8rem, 1.4rem);
-          margin-bottom: 12px;
+          font-size: 1.2rem;
+          margin-bottom: 10px;
           font-weight: 600;
-          line-height: 1.4;
+          line-height: 1.3;
           text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
         
         /* --- STYLES FOR SCROLLING NEWS --- */
         .news-content {
-            height: 110px; /* Set a fixed height for the scroll area */
+            height: 120px;
             overflow: hidden;
             position: relative;
         }
@@ -184,7 +231,6 @@ function SchoolHome() {
         }
 
         .news-list.scrolling {
-            
             animation: scroll-up ${newsItems.length * 6}s linear infinite;
         }
 
@@ -197,7 +243,7 @@ function SchoolHome() {
                 transform: translateY(0);
             }
             100% {
-                transform: translateY(-50%); /* Scrolls exactly one half of the duplicated list */
+                transform: translateY(-50%);
             }
         }
         /* --- END OF SCROLLING NEWS STYLES --- */
@@ -205,95 +251,102 @@ function SchoolHome() {
         .news-highlight {
           color: #f5f5f5;
           font-weight: 500;
-          font-size: clamp(0.95rem, 1.2vw + 0.8rem, 1.2rem);
-          margin-bottom: 1rem; /* Space between news items */
-          line-height: 1.5;
+          font-size: 1rem;
+          margin-bottom: 0.8rem;
+          line-height: 1.4;
           text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-          display: block; /* Ensure each news item is on its own line */
+          display: block;
+          padding: 0 5px;
         }
 
         .news-divider {
           height: 2px;
           background-color: #d01b1b;
-          margin: 12px 0;
+          margin: 10px 0;
           opacity: 0.8;
           border-radius: 1px;
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 1024px) {
+        /* Responsive adjustments for news container */
+        @media (min-width: 768px) {
           .news-container {
-            top: 35%;
-            left: 3%;
-            width: 75%;
-            max-width: 280px;
-            padding: 18px;
-          }
-        }
-
-        @media (max-width: 768px) {
-          .news-container {
-            top: 45%;
-            left: 4%;
-            width: 70%;
-            max-width: 260px;
-            padding: 16px;
+            top: 60%;
+            left: 5%;
+            transform: translateY(-50%);
+            width: 35%;
+            max-width: 350px;
+            padding: 20px;
           }
           
           .news-title {
-            line-height: 1.3;
+            font-size: 1.3rem;
           }
           
           .news-highlight {
-            line-height: 1.4;
+            font-size: 1.1rem;
+          }
+        }
+
+        @media (min-width: 1024px) {
+          .news-container {
+            left: 3%;
+            width: 30%;
+            max-width: 380px;
           }
         }
 
         @media (max-width: 480px) {
           .news-container {
-            top: 50%;
-            left: 5%;
-            width: 75%;
-            max-width: 240px;
-            padding: 14px;
+            top: 60%;
+            width: 50%;
+              left: 30%;
+            padding: 12px;
+          }
+          
+          .news-content {
+            height: 100px;
           }
           
           .news-title {
-            margin-bottom: 10px;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
           }
           
-          .news-divider {
-            margin: 10px 0;
+          .news-highlight {
+            font-size: 0.9rem;
+            margin-bottom: 0.6rem;
           }
         }
 
         @media (max-width: 375px) {
           .news-container {
-            top: 60%;
-            left: 5%;
-            width: 80%;
-            max-width: 220px;
-            padding: 12px;
+            top: 65%;
+            left: 30%;
+            width: 50%;
           }
           
-          .news-highlight {
-            line-height: 1.35;
+          .news-content {
+            height: 90px;
           }
         }
 
         @media (max-width: 320px) {
           .news-container {
-            top: 50%;
-            left: 5%;
-            width: 85%;
-            max-width: 200px;
-            padding: 10px 12px;
+            top: 65%;
+            width: 50%;
+            padding: 10px;
+            left: 30%;
           }
           
           .news-title {
-            margin-bottom: 8px;
+            font-size: 1rem;
+          }
+          
+          .news-highlight {
+            font-size: 0.85rem;
           }
         }
+
         /* Keyframes */
         @keyframes slideUpFadeIn {
           0% {
@@ -380,45 +433,60 @@ function SchoolHome() {
       `}</style>
 
       {/* Header Section */}
-      <motion.div 
-        className="head"
-        initial={{ y: -50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="college-name">
-          <h2>ST.JOSEPH'S L.P. SCHOOL,</h2>
-          <h2 id="h">KUTTIKANAM</h2>
+     <header className="fixed-header">
+        <div className="header-content">
+          <div className="head">
+            <div className="college-name">   
+              <h2>ST.JOSEPH'S L.P. SCHOOL,</h2><h2 id="h">KUTTIKANAM</h2>
+            </div>
+          </div>
+
+          {/* Desktop Navigation */}
+          {windowWidth > 1300 && (
+            <div className="desktop-nav">
+              <nav>
+                <ul>
+                  <li><a href="/" target="_self">HOME</a></li>
+                  <li><a href="/about" target="_self">ABOUT US</a></li>
+                  <li><a href="/gallery" target="_blank">GALLERY</a></li>
+                  <li><a href="/academics" target="_self">ACADEMICS</a></li>
+                  <li><a href="/admission" target="_self">ADMISSION</a></li>
+                  <li><a href="/staffs" target="_self">STAFFS</a></li>
+                  <li><a href="/contact" target="_blank">CONTACT US</a></li>
+                </ul>
+              </nav>
+            </div>
+          )}
+
+          {/* Mobile Hamburger Button */}
+          {windowWidth <= 1300 && (
+            <button className="hamburger" onClick={toggleMenu} aria-label="Menu">
+              <i className={`fas ${isMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
+            </button>
+          )}
         </div>
-      </motion.div>
 
-      {/* Mobile Menu Button */}
-      <motion.button 
-        className="hamburger" 
-        onClick={toggleMenu} 
-        aria-label="Menu"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-      >
-        <i className={`fas ${isMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
-      </motion.button>
+        {/* Mobile Navigation Menu */}
+        {windowWidth <= 1300 && isMenuOpen && (
+          <div className="menu-overlay" onClick={closeMenu}></div>
+        )}
 
-      {isMenuOpen && <div className="menu-overlay" onClick={closeMenu}></div>}
-
-      {/* Navigation - Kept as original per requirements */}
-      <div className={`nav2 ${isMenuOpen ? 'active' : ''}`}>
-        <nav>
-          <ul>
-            <li><Link to="/" onClick={closeMenu}>HOME</Link></li>
-            <li><Link to="/about" onClick={closeMenu}>ABOUT US</Link></li>
-            <li><Link to="/gallery" onClick={closeMenu}>GALLERY</Link></li>
-            <li><Link to="/academics" onClick={closeMenu}>ACADEMICS</Link></li>
-            <li><Link to="/admission" onClick={closeMenu}>ADMISSION</Link></li>
-            <li><Link to="/staffs" onClick={closeMenu}>STAFFS</Link></li>
-            <li><Link to="/contact" onClick={closeMenu}>CONTACT US</Link></li>
-          </ul>
-        </nav>
-      </div>
+        {windowWidth <= 1300 && (
+          <div className={`nav2 ${isMenuOpen ? 'active' : ''}`}>
+            <nav>
+              <ul>
+                <li><a href="/" target="_self" onClick={closeMenu}>HOME</a></li>
+                <li><a href="/about" target="_self" onClick={closeMenu}>ABOUT US</a></li>
+                <li><a href="/gallery" target="_blank" onClick={closeMenu}>GALLERY</a></li>
+                <li><a href="/academics" target="_self" onClick={closeMenu}>ACADEMICS</a></li>
+                <li><a href="/admission" target="_self" onClick={closeMenu}>ADMISSION</a></li>
+                <li><a href="/staffs" target="_self" onClick={closeMenu}>STAFFS</a></li>
+                <li><a href="/contact" target="_blank" onClick={closeMenu}>CONTACT US</a></li>
+              </ul>
+            </nav>
+          </div>
+        )}
+      </header>
 
       {/* Hero Section with Parallax Effect */}
       <div className="video">
@@ -628,8 +696,7 @@ function SchoolHome() {
 
       <div className="copyright">
         <p>
-          Copyright &copy; 2024 All Rights Reserved | ST.Joseph's L.P. School Kuttikanam |
-          Privacy Policy | Terms & Conditions
+          Copyright &copy; 2024 All Rights Reserved 
         </p>
       </div>
     </>
