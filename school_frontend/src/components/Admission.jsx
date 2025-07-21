@@ -121,7 +121,7 @@ const Admission = () => {
           transform: translate(-50%, -50%);
           color: black;
           padding: 10px 20px;
-          font-size: 20px;
+          font-size: 14px;
           text-align: center;
         }
 
@@ -267,7 +267,7 @@ const Admission = () => {
         <div className="header-content">
           <div className="head">
             <div className="college-name">   
-              <h2>ST.JOSEPH'S L.P. SCHOOL,</h2><h2 id="h">KUTTIKANAM</h2>
+              <h2>ST.JOSEPH'S L.P. SCHOOL</h2><h2 id="h">KUTTIKANAM</h2>
             </div>
           </div>
 
@@ -278,11 +278,11 @@ const Admission = () => {
                 <ul>
                   <li><a href="/" target="_self">HOME</a></li>
                   <li><a href="/about" target="_self">ABOUT US</a></li>
-                  <li><a href="/gallery" target="_blank">GALLERY</a></li>
+                  <li><a href="/gallery" target="_self">GALLERY</a></li>
                   <li><a href="/academics" target="_self">ACADEMICS</a></li>
                   <li><a href="/admission" target="_self">ADMISSION</a></li>
                   <li><a href="/staffs" target="_self">STAFFS</a></li>
-                  <li><a href="/contact" target="_blank">CONTACT US</a></li>
+                  <li><a href="/contact" target="_self">CONTACT US</a></li>
                 </ul>
               </nav>
             </div>
@@ -307,11 +307,11 @@ const Admission = () => {
               <ul>
                 <li><a href="/" target="_self" onClick={closeMenu}>HOME</a></li>
                 <li><a href="/about" target="_self" onClick={closeMenu}>ABOUT US</a></li>
-                <li><a href="/gallery" target="_blank" onClick={closeMenu}>GALLERY</a></li>
+                <li><a href="/gallery" target="_self" onClick={closeMenu}>GALLERY</a></li>
                 <li><a href="/academics" target="_self" onClick={closeMenu}>ACADEMICS</a></li>
                 <li><a href="/admission" target="_self" onClick={closeMenu}>ADMISSION</a></li>
                 <li><a href="/staffs" target="_self" onClick={closeMenu}>STAFFS</a></li>
-                <li><a href="/contact" target="_blank" onClick={closeMenu}>CONTACT US</a></li>
+                <li><a href="/contact" target="_self" onClick={closeMenu}>CONTACT US</a></li>
               </ul>
             </nav>
           </div>
