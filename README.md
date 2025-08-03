@@ -67,7 +67,7 @@ mern_school_website/
 
 ### 1. Clone the Repository
 ```sh
-git clone [<this-repo-url>](https://github.com/Abhirag05/mern_school_website.git)
+git clone https://github.com/Abhirag05/mern_school_website.git
 ```
 
 ### 2. Install Dependencies
